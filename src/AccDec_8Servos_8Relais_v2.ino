@@ -6,7 +6,7 @@
 
       /*********************************************
        *                                           *
-       *  modified by M.Ross => AccDec8Servo8Relè  *
+       *  modified by M5Ross => AccDec8Servo8Relè  *
        *                                           *
        *********************************************/
 
@@ -27,7 +27,7 @@ int numfpins = 8;
 byte fpins [] = {3,4,5,6,7,8,9,10};
 byte Rpins [] = {19,18,17,16,15,14,13,12};
 
-const int LED = 11;
+const int Led_pin = 11;
 
 NmraDcc  Dcc ;
 
@@ -115,8 +115,8 @@ void setup()   //******************************************************
       pinMode(Rpins[i], OUTPUT);
       digitalWrite(Rpins[i], 0);
      }
-  pinMode(LED, OUTPUT);
-  digitalWrite(LED, 1);
+  pinMode(Led_pin, OUTPUT);
+  digitalWrite(Led_pin, 1);
   
   // Setup which External Interrupt, the Pin it's associated with that we're using 
   Dcc.pin(0, 2, 0);
@@ -176,7 +176,7 @@ void setup()   //******************************************************
         //pinMode(fpins[i],INPUT);
         }
   }
-  digitalWrite(LED, 0);
+  digitalWrite(Led_pin, 0);
 }
 
 void loop()   //**********************************************************************
@@ -193,7 +193,7 @@ void loop()   //****************************************************************
   delay(8);
   for (int i=0; i < numfpins; i++) {
     if (ftn_queue[i].inuse==1)  {
-      digitalWrite(LED, 1);
+      digitalWrite(Led_pin, 1);
 
 	      if (servo_slow_counter++ > servo_slowdown)
 	      {
@@ -224,7 +224,7 @@ void loop()   //****************************************************************
               if(CV28.GetSave()) Dcc.setCV( 34+(i*5), ftn_queue[i].current_position);
               
               //pinMode(fpins[i],INPUT);
-              digitalWrite(LED, 0);
+              digitalWrite(Led_pin, 0);
               #ifdef DEBUG
                 Serial.print("Servo");
                 Serial.print(i, DEC) ;
@@ -242,7 +242,7 @@ void loop()   //****************************************************************
               if(CV28.GetSave()) Dcc.setCV( 34+(i*5), ftn_queue[i].current_position);
               
               //pinMode(fpins[i],INPUT);
-              digitalWrite(LED, 0);
+              digitalWrite(Led_pin, 0);
               #ifdef DEBUG
                 Serial.print("Servo");
                 Serial.print(i, DEC) ;
@@ -280,16 +280,16 @@ void CVrefresh(uint8_t i) {
 // on the power supply for 6ms to ACK a CV Read
 extern void notifyCVAck(void) {
   digitalWrite( 12, HIGH );
-  digitalWrite( LED, HIGH );
+  digitalWrite( Led_pin, HIGH );
   delay(6);
   digitalWrite( 12, LOW );
-  digitalWrite( LED, LOW );
+  digitalWrite( Led_pin, LOW );
 }
 
 extern void notifyCVChange( uint16_t CV, uint8_t Value) {
-  digitalWrite( LED, HIGH );
+  digitalWrite( Led_pin, HIGH );
   delay(20);
-  digitalWrite( LED, LOW );
+  digitalWrite( Led_pin, LOW );
   CV28.init();
   for (uint8_t i=0; i < numfpins; i++) {
     CVrefresh(i);
